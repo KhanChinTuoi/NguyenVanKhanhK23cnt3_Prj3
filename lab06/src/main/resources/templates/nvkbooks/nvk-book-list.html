@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <title>Book List</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body style="background: #ccc">
+<section class="container my-3 bg-white p-3 rounded">
+
+    <h2 class="mb-3">Book List</h2>
+
+    <a href="#" th:href="@{/nvkbooks/new}" class="btn btn-success mb-3">Add New Book</a>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Authors</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="book : ${nvkBooks}">
+            <td th:text="${book.nvkId}"></td>
+            <td th:text="${book.nvkCode}"></td>
+            <td th:text="${book.nvkName}"></td>
+
+            <td>
+                <img th:src="${book.nvkImgUrl}"
+                     style="width: 50px; height: 50px;" />
+            </td>
+
+            <td th:text="${book.nvkQuantity}"></td>
+            <td th:text="${book.nvkPrice}"></td>
+
+            <td>
+                <span th:each="a : ${book.nvkAuthors}"
+                      th:text="${a.nvkName}"
+                      class="badge rounded-pill bg-warning text-dark mx-1">
+                </span>
+            </td>
+
+            <td>
+                <a th:href="@{/nvkbooks/edit/{id}(id=${book.nvkId})}" class="btn btn-sm btn-primary">Edit</a>
+                <a th:href="@{/nvkbooks/delete/{id}(id=${book.nvkId})}"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Delete book?');">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+</body>
+</html>
