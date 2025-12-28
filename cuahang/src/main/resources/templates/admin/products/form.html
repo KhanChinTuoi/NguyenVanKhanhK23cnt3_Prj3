@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${maSP.maSP == null ? 'Thêm sản phẩm mới' : 'Cập nhật sản phẩm'}"></title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-hover: #3f37c9;
+            --success: #28a745;
+            --bg-body: #f1f5f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .admin-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        /* Navigation Buttons */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-group { display: flex; gap: 12px; }
+
+        .btn-nav {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Form Styling */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .span-full { grid-column: span 2; }
+
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        input, select, textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+        }
+
+        /* Image Preview Area */
+        .image-upload-section {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+        }
+
+        .preview-box img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Submit Actions */
+        .form-actions {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-cancel {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .btn-cancel:hover { color: var(--text-main); }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <div class="nav-bar">
+        <div class="nav-group">
+            <a th:href="@{/admin}" class="btn-nav">
+                <i class="fas fa-home"></i> Trang chủ
+            </a>
+            <a th:href="@{/admin/products}" class="btn-nav">
+                <i class="fas fa-arrow-left"></i> Quay lại kho
+            </a>
+        </div>
+    </div>
+
+    <h1 th:text="${maSP.maSP == null ? 'Thêm sản phẩm mới' : 'Chỉnh sửa sản phẩm'}"></h1>
+    <p class="subtitle">Quản lý kho hàng vĩnh viễn: Vui lòng cập nhật thông tin sản phẩm chính xác.</p>
+
+    <form th:action="@{/admin/products/save}" th:object="${maSP}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{maSP}" />
+
+        <div class="form-grid">
+            <div class="form-group span-full">
+                <label><i class="fas fa-tag"></i> Tên sản phẩm</label>
+                <input th:field="*{tenSP}" type="text" placeholder="Nhập tên sản phẩm..." required />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-money-bill-wave"></i> Giá bán (VNĐ)</label>
+                <input th:field="*{gia}" type="number" placeholder="0" required />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-boxes-stacked"></i> Số lượng tồn kho</label>
+                <input th:field="*{soLuong}" type="number" placeholder="Nhập số lượng thực tế..." required />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-layer-group"></i> Danh mục</label>
+                <select th:field="*{danhMuc.maDMSP}">
+                    <option th:each="dm : ${dms}" th:value="${dm.maDMSP}" th:text="${dm.tenDMSP}"></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-image"></i> Hình ảnh minh họa</label>
+                <div class="image-upload-section">
+                    <input type="file" name="imageFile" accept="image/*" />
+                    <div class="preview-box" th:if="*{hinhAnh}">
+                        <img th:src="@{'/uploads/' + *{hinhAnh}}" alt="Current">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group span-full">
+                <label><i class="fas fa-file-lines"></i> Mô tả chi tiết</label>
+                <textarea th:field="*{motaSP}" rows="5" placeholder="Nhập thông số kỹ thuật hoặc giới thiệu sản phẩm..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-save"></i> Lưu dữ liệu
+            </button>
+            <a th:href="@{/admin/products}" class="btn-cancel">Hủy bỏ</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

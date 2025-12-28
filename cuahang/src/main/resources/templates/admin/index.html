@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị Cửa hàng Linh kiện - NVK</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        /* Sidebar trang trí kiểu Gaming/Tech */
+        .admin-sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1a2a6c, #b21f1f, #fdbb2d); /* Gradient Tech */
+            color: white;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        .admin-sidebar h4 {
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .admin-sidebar ul { list-style: none; padding: 0; }
+        .admin-sidebar ul li a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        .admin-sidebar ul li a:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            padding-left: 35px;
+        }
+        .admin-sidebar i { width: 30px; }
+
+        /* Content Area */
+        .admin-header {
+            background: #fff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stat-card {
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s;
+            color: white;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .bg-cpu { background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); }
+        .bg-gpu { background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }
+        .bg-ram { background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%); }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white !important;
+            border-radius: 5px;
+            margin: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-3 col-lg-2 admin-sidebar d-md-block px-0 shadow">
+            <div class="text-center">
+                <h4><i class="fa-solid fa-microchip"></i> NVK TECH</h4>
+            </div>
+            <ul>
+                <li><a th:href="@{/admin}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a th:href="@{/admin/products}"><i class="fa-solid fa-box"></i> Linh kiện</a></li>
+                <li><a th:href="@{/admin/categories}"><i class="fa-solid fa-list"></i> Danh mục</a></li>
+                <li><a th:href="@{/admin/orders}"><i class="fa-solid fa-cart-shopping"></i> Đơn hàng</a></li>
+                <li><a th:href="@{/admin/users}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
+                <li class="mt-5"><a th:href="@{/admin/logout}" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
+            </ul>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-0">
+            <header class="admin-header">
+                <h5 class="m-0 text-secondary">Hệ thống quản lý kho linh kiện</h5>
+                <div class="user-info">
+                    <span>Xin chào, <strong class="text-primary" th:text="${session.ADMIN.hoTen}">Admin</strong></span>
+                </div>
+            </header>
+
+            <div class="p-4">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card p-4 shadow-sm border-0 bg-white">
+                            <h2 class="fw-bold">Bảng điều khiển hệ thống</h2>
+                            <p class="text-muted">Chào mừng bạn đến với trang quản trị cửa hàng linh kiện điện tử.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card stat-card bg-cpu p-4 shadow">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5>Sản phẩm</h5>
+                                    <h2 class="fw-bold">1,250</h2>
+                                </div>
+                                <i class="fa-solid fa-processor fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card bg-gpu p-4 shadow">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5>Đơn hàng mới</h5>
+                                    <h2 class="fw-bold">48</h2>
+                                </div>
+                                <i class="fa-solid fa-server fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card bg-ram p-4 shadow">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5>Doanh thu</h5>
+                                    <h2 class="fw-bold">245M</h2>
+                                </div>
+                                <i class="fa-solid fa-memory fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h4 class="mb-3">Thao tác nhanh</h4>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a th:href="@{/admin/products/create}" class="btn btn-outline-primary w-100 p-3 shadow-sm border-dashed">
+                                <i class="fa-solid fa-plus"></i> Thêm linh kiện mới
+                            </a>
+
+                        </div>
+                        <div class="col-md-3">
+                                <a th:href="@{/admin/categories/create}" class="btn btn-outline-primary w-100 p-3 shadow-sm border-dashed">
+                                    <i class="fa-solid fa-plus"></i> Thêm danh mục mới
+                                </a>
+                        </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

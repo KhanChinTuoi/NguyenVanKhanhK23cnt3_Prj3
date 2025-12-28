@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Sản phẩm | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #2ec4b6;
+            --danger-color: #e71d36;
+            --warning-color: #ff9f1c;
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #2b2d42;
+            --text-muted: #8d99ae;
+            --border-color: #edf2f7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px;
+        }
+
+        .admin-content-area {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Nút thêm mới */
+        .primary-button {
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .primary-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Table Styling */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table thead th {
+            background-color: #f1f5f9;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 15px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            font-size: 15px;
+        }
+
+        .table tbody tr:hover {
+            background-color: #fcfcfd;
+        }
+
+        /* Ảnh sản phẩm */
+        .product-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Badge tồn kho */
+        .stock-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .stock-high { background: #d1fae5; color: #065f46; }
+        .stock-low { background: #fee2e2; color: #991b1b; }
+
+        /* Nút hành động */
+        .action-link {
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .edit-link { color: var(--primary-color); }
+        .delete-link { color: var(--danger-color); }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        .price-text {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+<div class="admin-content-area">
+    <div class="header-section">
+        <h1>Quản lý kho sản phẩm</h1>
+        <a th:href="@{/admin/products/create}" class="primary-button">+ Thêm sản phẩm mới</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
+            <th style="text-align: center;">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sp : ${products}">
+            <td th:text="${sp.maSP}" style="color: var(--text-muted);"></td>
+            <td>
+                <img th:src="@{'/uploads/' + ${sp.hinhAnh}}" class="product-img" alt="Product">
+            </td>
+            <td th:text="${sp.tenSP}" style="font-weight: 500;"></td>
+            <td class="price-text" th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
+            <td>
+                <span th:class="${sp.soLuong > 5} ? 'stock-badge stock-high' : 'stock-badge stock-low'"
+                      th:text="${sp.soLuong}">0</span>
+            </td>
+            <td style="text-align: center;">
+                <a th:href="@{'/admin/products/edit/' + ${sp.maSP}}" class="action-link edit-link">Sửa</a>
+                <span style="color: #cbd5e0;">|</span>
+                <a th:href="@{'/admin/products/delete/' + ${sp.maSP}}"
+                   class="action-link delete-link"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

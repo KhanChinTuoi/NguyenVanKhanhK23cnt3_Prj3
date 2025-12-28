@@ -1,0 +1,593 @@
+/* Tổng thể */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+}
+
+.product-section {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.detail-container {
+    display: flex;
+    gap: 50px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    align-items: flex-start;
+}
+
+/* Vùng ảnh */
+.detail-image-area {
+    flex: 1;
+    text-align: center;
+}
+
+.detail-image-area img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.detail-image-area img:hover {
+    transform: scale(1.05);
+}
+
+/* Vùng thông tin */
+.detail-info-area {
+    flex: 1;
+}
+
+.detail-info-area h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    color: #111;
+}
+
+.product-price-display {
+    font-size: 1.8rem;
+    color: #d70018; /* Màu đỏ giá bán */
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.product-attributes {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f1f3f5;
+    border-radius: 8px;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Form mua hàng */
+.buy-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.buy-form input[type="number"] {
+    width: 70px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btn-add-to-cart {
+    background-color: #007bff; /* Màu xanh công nghệ */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex-grow: 1;
+}
+
+.btn-add-to-cart:hover {
+    background-color: #0056b3;
+}
+
+.btn-add-to-cart:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Mô tả */
+.product-description-text {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.product-description-text h3 {
+    color: #444;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 768px) {
+    .detail-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .detail-info-area h1 {
+        font-size: 1.8rem;
+    }
+}
+/* --- Global Styles --- */
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    color: #333;
+}
+
+/* --- Header & Navigation --- */
+.main-header {
+    background-color: #ffffff;
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.main-nav {
+    margin-top: 15px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    margin: 0 15px;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: #007bff;
+}
+
+/* --- Search Section --- */
+.product-section {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.product-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.search-form input {
+    width: 400px;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 25px 0 0 25px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.search-form button {
+    padding: 12px 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 25px 25px 0;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+/* Container bao quanh input và nút X */
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper input {
+    padding-right: 40px; /* Chừa chỗ cho nút X không đè lên chữ */
+    width: 400px; /* Giữ nguyên độ rộng cũ của bạn */
+    padding-left: 20px;
+    height: 45px;
+    border: 1px solid #ddd;
+    border-radius: 25px 0 0 25px; /* Bo góc bên trái */
+    outline: none;
+}
+
+/* Nút X xóa tìm kiếm */
+.clear-search {
+    position: absolute;
+    right: 15px;
+    text-decoration: none;
+    color: #999;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.clear-search:hover {
+    color: #d70018; /* Chuyển sang màu đỏ khi di chuột vào */
+}
+
+/* Chỉnh lại nút Tìm kiếm cho khớp với wrapper mới */
+.search-form button {
+    height: 47px; /* Khớp với chiều cao input */
+    padding: 0 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 25px 25px 0; /* Bo góc bên phải */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- Product Grid --- */
+.product-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.product-item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.product-item a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain; /* Giữ nguyên tỉ lệ linh kiện không bị méo */
+    background: #fdfdfd;
+    padding: 15px;
+}
+
+.product-info {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #222;
+    height: 2.4em; /* Giới hạn 2 dòng cho tên */
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    color: #d70018; /* Màu đỏ giá giống trang detail */
+    font-weight: bold;
+}
+
+.product-price span::after {
+    content: " ₫";
+}
+/* --- Admin Content Area --- */
+.admin-content-area {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.back-to-dashboard {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 20px;
+    transition: color 0.3s;
+}
+
+.back-to-dashboard:hover {
+    color: #007bff;
+}
+
+/* --- Styled Table --- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.data-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+    padding: 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.data-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* --- Buttons --- */
+.action-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.primary-button {
+    background-color: #007bff;
+    color: white !important;
+}
+
+.primary-button:hover {
+    background-color: #0056b3;
+}
+
+.action-edit {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+.action-delete {
+    color: #dc3545;
+}
+
+.action-edit:hover, .action-delete:hover {
+    text-decoration: underline;
+}
+
+/* --- Styled Form --- */
+.admin-form .form-group {
+    margin-bottom: 20px;
+}
+
+.admin-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.admin-form input[type="text"],
+.admin-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Quan trọng để padding không làm tràn width */
+}
+
+.admin-form textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+/* --- Order Specific Styles --- */
+.order-header {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Hộp thông tin khách hàng */
+.customer-info-box {
+    background: #f8f9fa;
+    border-left: 5px solid #007bff;
+    padding: 20px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.customer-info-box h3 {
+    grid-column: 1 / -1;
+    margin: 0 0 10px 0;
+    color: #007bff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.customer-info-box p {
+    margin: 0;
+    color: #555;
+}
+
+/* Hộp tổng tiền cuối trang */
+.order-summary-box {
+    margin-top: 30px;
+    text-align: right;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+
+.order-summary-box h3 {
+    margin: 0;
+    color: #333;
+}
+
+.total-amount {
+    color: #d70018; /* Màu đỏ nổi bật */
+    font-size: 2rem;
+    margin-left: 10px;
+}
+
+/* Căn chỉnh cột số liệu trong bảng */
+.column-total, .column-price {
+    text-align: right;
+    font-weight: 600;
+}
+
+.secondary-button {
+    background-color: #6c757d;
+    color: white !important;
+}
+
+.secondary-button:hover {
+    background-color: #5a6268;
+}
+/* --- Product Admin Specific --- */
+
+/* Ảnh thu nhỏ trong bảng danh sách */
+.product-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+/* Badge cho danh mục trong bảng */
+.category-badge {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Định dạng cột giá trong admin */
+.column-price-admin {
+    color: #d70018;
+    font-weight: bold;
+}
+
+/* Cấu trúc Form Sản phẩm */
+.product-edit-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Chia form làm 2 cột */
+    gap: 20px;
+}
+
+.product-edit-form .form-group.full-width {
+    grid-column: 1 / -1; /* Các ô như Tên hoặc Mô tả chiếm hết 2 cột */
+}
+
+/* Style cho ô Upload File */
+input[type="file"] {
+    background: #f8f9fa;
+    padding: 10px;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Nút Save đặc biệt */
+.save-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}

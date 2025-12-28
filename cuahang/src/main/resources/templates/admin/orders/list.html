@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý hóa đơn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .admin-content-area { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { background: #4e73df; color: white; padding: 12px; text-align: left; }
+        .data-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .btn-view { background: #4e73df; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 13px; }
+        .search-box input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 250px; }
+        .search-box button { padding: 8px 15px; background: #1cc88a; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="admin-content-area">
+    <div class="header">
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a th:href="@{/admin}" style="text-decoration: none; color: #4e73df; font-weight: bold;"><i class="fa fa-home"></i> Home</a>
+            <h1 style="margin: 0; font-size: 24px;">Quản lý hóa đơn</h1>
+        </div>
+        <form th:action="@{/admin/orders}" method="get" class="search-box">
+            <input type="text" name="search" th:value="${searchValue}" placeholder="Tìm tên khách hàng...">
+            <button type="submit"><i class="fa fa-search"></i> Tìm</button>
+        </form>
+    </div>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Mã HĐ</th>
+            <th>Khách hàng</th>
+            <th>Ngày lập</th>
+            <th>Tổng tiền</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hd : ${orders}">
+            <td th:text="${'#' + hd.maHD}"></td>
+            <td th:text="${hd.khachHang != null ? hd.khachHang.hoTen : 'Khách vãng lai'}"></td>
+            <td th:text="${hd.ngayLap != null ? #dates.format(hd.ngayLap, 'dd/MM/yyyy HH:mm') : 'N/A'}"></td>
+            <td style="font-weight: bold; color: #e74c3c;">
+                <span th:text="${hd.tongTien != null ? #numbers.formatDecimal(hd.tongTien, 0, 'COMMA', 0, 'POINT') : '0'}"></span>₫
+            </td>
+            <td>
+                <a th:href="@{/admin/orders/view/{id}(id=${hd.maHD})}" class="btn-view">
+                    <i class="fa fa-eye"></i> Chi tiết
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

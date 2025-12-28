@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý khách hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .main-container { padding: 30px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .alert-custom { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="alert-custom">
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show shadow">
+            <i class="fa-solid fa-check-circle me-2"></i> <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow">
+            <i class="fa-solid fa-exclamation-triangle me-2"></i> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Quản lý khách hàng</h2>
+        <a th:href="@{/admin}" class="btn-nav btn-home">
+            <i class="fa fa-home"></i> Trang chủ
+        </a>
+        <button class="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="fa-solid fa-user-plus me-2"></i> Thêm mới
+        </button>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form th:action="@{/admin/users}" method="get" class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm kiếm theo tên hoặc email...">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Họ tên</th>
+                    <th>Username</th>
+                    <th>Liên hệ</th>
+                    <th>Địa chỉ</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="u : ${users}">
+                    <td class="ps-4 fw-bold text-muted" th:text="${u.maKh}"></td>
+                    <td class="fw-bold" th:text="${u.hoTen}"></td>
+                    <td th:text="${u.username}"></td>
+                    <td>
+                        <div th:text="${u.email}"></div>
+                        <small class="text-secondary" th:text="${u.sdt}"></small>
+                    </td>
+                    <td class="small" th:text="${u.diaChi}"></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-warning me-1" th:onclick="'showEdit(' + ${u.maKh} + ')'">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <a th:href="@{/admin/users/delete/{id}(id=${u.maKh})}"
+                           class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn chắc chắn muốn xóa?')">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form th:action="@{/admin/users/add}" method="post" class="modal-content">
+            <div class="modal-header"><h5>Thêm khách hàng mới</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="mb-3"><label class="form-label">Họ tên</label><input type="text" name="hoTen" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Username</label><input type="text" name="username" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Mật khẩu</label><input type="password" name="password" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Số điện thoại</label><input type="text" name="sdt" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Địa chỉ</label><textarea name="diaChi" class="form-control" rows="2"></textarea></div>
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-primary">Lưu thông tin</button></div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form th:action="@{/admin/users/update}" method="post" class="modal-content">
+            <div class="modal-header bg-warning"><h5>Cập nhật thông tin</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="hidden" name="maKh" id="edit_id">
+                <div class="mb-3"><label class="form-label">Họ tên</label><input type="text" name="hoTen" id="edit_hoTen" class="form-control" required></div>
+                <div class="mb-3">
+                    <label class="form-label">Username (Không thể sửa)</label>
+
+                    <input type="text" id="edit_username_display" class="form-control" disabled>
+
+                    <input type="hidden" name="username" id="edit_username_hidden">
+                </div>
+                <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" id="edit_email" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Số điện thoại</label><input type="text" name="sdt" id="edit_sdt" class="form-control"></div>
+                <div class="mb-3"><label class="form-label">Địa chỉ</label><textarea name="diaChi" id="edit_diaChi" class="form-control" rows="2"></textarea></div>
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-warning">Lưu thay đổi</button></div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Tự động đóng thông báo sau 4 giây
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+        });
+    }, 4000);
+
+   function showEdit(id) {
+    fetch('/admin/users/edit/' + id)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('edit_id').value = data.maKh;
+
+            // Gán Username vào ô hiển thị và ô ẩn
+            document.getElementById('edit_username_display').value = data.username;
+            document.getElementById('edit_username_hidden').value = data.username;
+            document.getElementById('edit_hoTen').value = data.hoTen;
+            document.getElementById('edit_email').value = data.email;
+            document.getElementById('edit_sdt').value = data.sdt;
+            document.getElementById('edit_diaChi').value = data.diaChi;
+
+            // Mở Modal
+            new bootstrap.Modal(document.getElementById('editModal')).show();
+        })
+        .catch(err => alert("Không tìm thấy dữ liệu khách hàng!"));
+}
+</script>
+</body>
+</html>

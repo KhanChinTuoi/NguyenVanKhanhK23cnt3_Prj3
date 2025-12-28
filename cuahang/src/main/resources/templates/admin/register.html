@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký Admin - Cửa hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .register-container { max-width: 500px; margin-top: 80px; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-success { background-color: #28a745; border: none; }
+    </style>
+</head>
+<body>
+
+<div class="container d-flex justify-content-center">
+    <div class="register-container w-100">
+        <div class="card p-4">
+            <h3 class="text-center mb-4 text-primary">Đăng ký Tài khoản Admin</h3>
+
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+
+            <form th:action="@{/admin/register}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Ví dụ: admin_01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="hoTen" class="form-label">Họ và Tên</label>
+                    <input type="text" class="form-control" id="hoTen" name="hoTen"
+                           placeholder="Nhập họ tên đầy đủ" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-success">Tạo tài khoản</button>
+                </div>
+            </form>
+
+            <hr>
+            <div class="text-center">
+                <p class="small">Đã có tài khoản? <a th:href="@{/admin/login}">Đăng nhập tại đây</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

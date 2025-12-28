@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng - NVK Tech</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root { --primary-color: #4e73df; }
+        body { background-color: #f8f9fc; font-family: 'Segoe UI', sans-serif; }
+        .card { border: none; border-radius: 15px; }
+        .quantity-control { display: flex; align-items: center; border: 1px solid #ddd; border-radius: 20px; overflow: hidden; width: fit-content; background: #fff; }
+        .btn-qty { border: none; background: white; padding: 5px 15px; cursor: pointer; transition: 0.2s; color: var(--primary-color); font-weight: bold; }
+        .btn-qty:hover { background: #f1f3f9; }
+        .qty-input { width: 45px; border: none; text-align: center; font-weight: bold; outline: none; background: transparent; }
+        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; transition: 0.3s; }
+        .product-img:hover { transform: scale(1.05); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .btn-checkout { background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); border: none; }
+        .cart-row { transition: 0.3s; }
+        .empty-cart-img { width: 150px; opacity: 0.6; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-4 border-0 shadow-sm" role="alert">
+        <i class="fa fa-check-circle me-2"></i> <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4 border-0 shadow-sm" role="alert">
+        <i class="fa fa-exclamation-triangle me-2"></i> <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0 text-dark">Giỏ hàng của bạn</h2>
+        <a th:href="@{/products}" class="btn btn-outline-primary btn-sm rounded-pill px-4 shadow-sm">
+            <i class="fa fa-arrow-left me-2"></i>Tiếp tục mua sắm
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm p-4 mb-4">
+                <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" class="empty-cart-img">
+                    <p class="text-muted fs-5">Giỏ hàng đang trống. Hãy chọn sản phẩm yêu thích nhé!</p>
+                </div>
+
+                <table class="table align-middle" th:if="${not #lists.isEmpty(cartItems)}">
+                    <thead class="text-muted small text-uppercase">
+                    <tr>
+                        <th style="min-width: 300px;">Sản phẩm</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-end">Thành tiền</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${cartItems}" class="cart-row">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img th:src="@{'/uploads/' + ${item.product.hinhAnh}}" class="product-img shadow-sm me-3">
+                                <div>
+                                    <div th:text="${item.product.tenSP}" class="fw-bold text-dark mb-1"></div>
+                                    <div class="text-primary fw-bold small">
+                                            <span class="item-price" th:data-price="${item.product.gia}"
+                                                  th:text="${#numbers.formatInteger(item.product.gia, 0, 'POINT')}"></span>₫
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="quantity-control mx-auto shadow-sm">
+                                <button class="btn-qty minus-btn"><i class="fa fa-minus"></i></button>
+                                <input type="number" th:value="${item.quantity}" th:data-id="${item.product.maSP}" class="qty-input" readonly>
+                                <button class="btn-qty plus-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </td>
+                        <td class="text-end fw-bold text-dark">
+                            <span class="line-total" th:text="${#numbers.formatInteger(item.subTotal, 0, 'POINT')}"></span>₫
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-link text-danger opacity-50 btn-remove"
+                                    th:data-url="@{/cart/remove/{id}(id=${item.product.maSP})}">
+                                <i class="fa fa-trash-can h5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm p-4 sticky-top" style="top: 20px;">
+                <h5 class="fw-bold mb-4">Tóm tắt đơn hàng</h5>
+
+                <div th:if="${session.USER != null}" class="mb-4 p-3 bg-light rounded-3 border-start border-4 border-primary">
+                    <div class="small text-muted mb-1"><i class="fa fa-user me-2"></i>Khách hàng:</div>
+                    <div class="fw-bold text-dark" th:text="${session.USER.hoTen}"></div>
+                    <div class="small text-muted" th:text="${session.USER.sdt}"></div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-muted">Tổng tạm tính:</span>
+                    <span class="fw-bold"><span id="sub-total-label" th:text="${#numbers.formatInteger(totalMoney, 0, 'POINT')}"></span>₫</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4 fs-4">
+                    <span class="fw-bold text-dark">Tổng cộng:</span>
+                    <span class="fw-bold text-primary">
+                        <span id="grand-total" th:text="${#numbers.formatInteger(totalMoney, 0, 'POINT')}"></span>₫
+                    </span>
+                </div>
+
+                <form th:action="@{/checkout}" method="post" id="formCheckout">
+                    <input type="hidden" name="customerId" th:if="${session.USER != null}" th:value="${session.USER.maKh}">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill btn-checkout shadow fw-bold py-3"
+                            th:disabled="${session.USER == null or #lists.isEmpty(cartItems)}">
+                        XÁC NHẬN ĐẶT HÀNG
+                    </button>
+                </form>
+
+                <div th:if="${session.USER == null}" class="alert alert-warning mt-3 border-0 small text-center rounded-3">
+                    <i class="fa fa-lock me-1"></i> Vui lòng <a th:href="@{/user/login}" class="fw-bold">Đăng nhập</a> để đặt hàng.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        function formatMoney(amount) {
+            return amount.toLocaleString('vi-VN').replace(/,/g, '.');
+        }
+
+        // Ajax cập nhật số lượng
+        function updateCart(input, newQty) {
+            const row = input.closest('.cart-row');
+            const price = parseFloat(row.find('.item-price').attr('data-price'));
+            const productId = input.data('id');
+
+            row.css('opacity', '0.6'); // Hiệu ứng loading
+
+            $.post('/cart/update', { id: productId, qty: newQty }, function() {
+                row.css('opacity', '1');
+
+                // Cập nhật thành tiền dòng này
+                const subTotal = price * newQty;
+                row.find('.line-total').text(formatMoney(subTotal));
+
+                // Cập nhật tổng tiền toàn đơn hàng
+                let grandTotal = 0;
+                $('.line-total').each(function() {
+                    grandTotal += parseFloat($(this).text().replace(/\./g, ''));
+                });
+                $('#grand-total').text(formatMoney(grandTotal));
+                $('#sub-total-label').text(formatMoney(grandTotal));
+
+            }).fail(function(xhr) {
+                row.css('opacity', '1');
+                Swal.fire({ icon: 'error', title: 'Hết hàng', text: xhr.responseText });
+                location.reload();
+            });
+        }
+
+        // Xử lý nút tăng
+        $('.plus-btn').on('click', function() {
+            let input = $(this).siblings('.qty-input');
+            let val = parseInt(input.val()) + 1;
+            input.val(val);
+            updateCart(input, val);
+        });
+
+        // Xử lý nút giảm
+        $('.minus-btn').on('click', function() {
+            let input = $(this).siblings('.qty-input');
+            let val = parseInt(input.val()) - 1;
+            if (val >= 1) {
+                input.val(val);
+                updateCart(input, val);
+            }
+        });
+
+        // Xử lý xóa sản phẩm bằng SweetAlert2
+        $('.btn-remove').on('click', function(e) {
+            e.preventDefault();
+            const url = $(this).data('url');
+
+            Swal.fire({
+                title: 'Bạn chắc chắn chứ?',
+                text: "Sản phẩm này sẽ bị xóa khỏi giỏ hàng!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#4e73df',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
